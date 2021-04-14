@@ -3,6 +3,7 @@
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
 import pandas as pd
+import matplotlib.pyplot as plt
 
 KEY = "<paste-your-text-analytics-key-here>"
 ENDPOINT = "<paste-your-text-analytics-endpoint-here>"
@@ -107,4 +108,12 @@ if __name__ == "__main__":
     df['Sentimiento']   = df.apply(lambda row: analyze_comment(client, row['Comentario']).get('sent', ''), axis=1)
 
     print(df)
+
+    print('\nGenerando gráfico...\n')
+    lista = list(df['Sentimiento'])
+    values = [lista.count('neutral'), lista.count('negative'), lista.count('positive')]
+    labels = ["Comentarios Neutrales", "Comentarios Negativos", "Comentarios Positivos"]
+    plt.pie(values, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+    plt.title("Distribución de Comentarios")
+    plt.show()
     
